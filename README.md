@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💻 Repositório Iniciante Java
 
 Bem-vindo ao meu repositório de estudos em **Java**!  
@@ -73,3 +74,7 @@ Aqui você encontrará exercícios e pequenos projetos para prática de lógica,
 2. Compile o arquivo:
 ```bash
 javac NomeDoArquivo.java
+=======
+# Repositorio-Iniciante
+Projetos Java iniciais para praticar fundamentos da linguagem e lógica de programação.
+>>>>>>> f9eba6a (Padronização de nomes de classes e arquivos para PascalCase)
