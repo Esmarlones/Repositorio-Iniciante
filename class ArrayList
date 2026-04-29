@@ -1,0 +1,118 @@
+class ArrayList:
+    def __init__(self):
+        # The list starts empty. It is the internal array of our structure.
+        self.data = []
+
+    def add(self, element):
+        # Adds a new element at the end of the list.
+        self.data.append(element)
+
+    def get(self, position):
+        # Returns the element that is in a specific position.
+        return self.data[position]
+
+    def remove(self, position):
+        # Removes the element from the informed position.
+        self.data.pop(position)
+
+    def size(self):
+        # Returns how many elements exist in the list.
+        return len(self.data)
+
+    def show(self):
+        # Returns all stored data.
+        return self.data
+
+
+def register_contact(contact_book):
+    print("\n=== CADASTRAR CONTATO ===")
+    name = input("Nome: ")
+    phone = input("Telefone: ")
+
+    contact = {
+        "name": name,
+        "phone": phone
+    }
+
+    contact_book.add(contact)
+    print("Contato cadastrado com sucesso!")
+
+
+def list_contacts(contact_book):
+    print("\n=== LISTA DE CONTATOS ===")
+
+    if contact_book.size() == 0:
+        print("Nenhum contato cadastrado.")
+        return
+
+    for i in range(contact_book.size()):
+        contact = contact_book.get(i)
+        print(f"{i + 1}. Nome: {contact['name']} | Telefone: {contact['phone']}")
+
+
+def search_contact(contact_book):
+    print("\n=== BUSCAR CONTATO ===")
+    searched_name = input("Digite o nome que deseja buscar: ")
+    found = False
+
+    for i in range(contact_book.size()):
+        contact = contact_book.get(i)
+
+        if contact["name"].lower() == searched_name.lower():
+            print(f"Contato encontrado: {contact['name']} - {contact['phone']}")
+            found = True
+
+    if not found:
+        print("Contato não encontrado.")
+
+
+def delete_contact(contact_book):
+    print("\n=== REMOVER CONTATO ===")
+    list_contacts(contact_book)
+
+    if contact_book.size() == 0:
+        return
+
+    number = int(input("Digite o número do contato que deseja remover: "))
+    position = number - 1
+
+    if position >= 0 and position < contact_book.size():
+        contact_book.remove(position)
+        print("Contato removido com sucesso!")
+    else:
+        print("Opção inválida.")
+
+
+def show_menu():
+    print("\n===== AGENDA TELEFÔNICA =====")
+    print("1. Cadastrar contato")
+    print("2. Listar contatos")
+    print("3. Buscar contato")
+    print("4. Remover contato")
+    print("5. Sair")
+
+
+def main():
+    contact_book = ArrayList()
+
+    while True:
+        show_menu()
+        option = input("Escolha uma opção: ")
+
+        if option == "1":
+            register_contact(contact_book)
+        elif option == "2":
+            list_contacts(contact_book)
+        elif option == "3":
+            search_contact(contact_book)
+        elif option == "4":
+            delete_contact(contact_book)
+        elif option == "5":
+            print("Programa finalizado.")
+            break
+        else:
+            print("Opção inválida.")
+
+
+if __name__ == "__main__":
+    main()
