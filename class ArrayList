@@ -2,7 +2,7 @@ class ArrayList:
     def __init__(self):
         self.MEMORY_SPACE = 10
         self.lastPosition = 0
-        self.array = [] * self.MEMORY_SPACE
+        self.array = [None] * self.MEMORY_SPACE
 
     def get(self, position: int):
         if position < 0 or position > (self.size() - 1):
@@ -29,6 +29,7 @@ class ArrayList:
             self.resizeMemory()
         self.array[self.lastPosition] = value
         self.lastPosition += 1
+       
 
     def insertAt(self, value, position: int):
         if position < 0 or position > self.lastPosition:
@@ -163,3 +164,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
