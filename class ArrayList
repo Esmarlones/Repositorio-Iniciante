@@ -1,27 +1,74 @@
 class ArrayList:
     def __init__(self):
-        # The list starts empty. It is the internal array of our structure.
-        self.data = []
+        self.MEMORY_SPACE = 10
+        self.lastPosition = 0
+        self.array = [] * self.MEMORY_SPACE
 
-    def add(self, element):
-        # Adds a new element at the end of the list.
-        self.data.append(element)
+    def get(self, position: int):
+        if position < 0 or position > (self.size() - 1):
+            raise IndexError("Indice fora dos limites da lista")
+        return self.array[position]
 
-    def get(self, position):
-        # Returns the element that is in a specific position.
-        return self.data[position]
+    def updateRemoveArray(self, start: int, end: int):
+        for index in range(start, end):
+            self.array[index] = self.array[index + 1]
+        self.array[self.lastPosition - 1] = None
+        self.lastPosition -= 1
 
-    def remove(self, position):
-        # Removes the element from the informed position.
-        self.data.pop(position)
+    def updateInsertArray(self, start: int, end: int):
+        for index in range(start, end, -1):
+            self.array[index] = self.array[index - 1]
+        self.lastPosition += 1
+
+    def removeAll(self):
+        self.array = [None] * self.capacity()
+        self.lastPosition = 0
+
+    def add(self, value):
+        if self.lastPosition == self.capacity():
+            self.resizeMemory()
+        self.array[self.lastPosition] = value
+        self.lastPosition += 1
+
+    def insertAt(self, value, position: int):
+        if position < 0 or position > self.lastPosition:
+            raise IndexError("Indice fora dos limites da lista")
+        if self.lastPosition == self.capacity():
+            self.resizeMemory()
+        self.updateInsertArray(self.lastPosition, position)
+        self.array[position] = value
+
+    def removeAt(self, position: int):
+        if position < 0 or position > (self.size() - 1):
+            raise IndexError("Indice fora dos limites da lista")
+        copy = self.array[position]
+        self.updateRemoveArray(position, self.size() - 1)
+        return copy
+
+    def remove(self):
+        if self.size() == 0:
+            raise IndexError("Indice fora dos limites da lista")
+        last = self.array[self.lastPosition - 1]
+        self.array[self.lastPosition - 1] = None
+        self.lastPosition -= 1
+        return last
+
+    def capacity(self):
+        return len(self.array)
 
     def size(self):
-        # Returns how many elements exist in the list.
-        return len(self.data)
+        return self.lastPosition
 
-    def show(self):
-        # Returns all stored data.
-        return self.data
+    def print(self):
+        for position in range(0, self.lastPosition):
+            print(self.array[position])
+
+    def resizeMemory(self):
+        print("Aumentando memoria da ArrayList")
+        newArray = [None] * (self.capacity() * 2)
+        for position in range(self.capacity()):
+            newArray[position] = self.array[position]
+        self.array = newArray
 
 
 def register_contact(contact_book):
@@ -45,9 +92,9 @@ def list_contacts(contact_book):
         print("Nenhum contato cadastrado.")
         return
 
-    for i in range(contact_book.size()):
-        contact = contact_book.get(i)
-        print(f"{i + 1}. Nome: {contact['name']} | Telefone: {contact['phone']}")
+    for position in range(contact_book.size()):
+        contact = contact_book.get(position)
+        print(f"{position + 1}. Nome: {contact['name']} | Telefone: {contact['phone']}")
 
 
 def search_contact(contact_book):
@@ -55,15 +102,15 @@ def search_contact(contact_book):
     searched_name = input("Digite o nome que deseja buscar: ")
     found = False
 
-    for i in range(contact_book.size()):
-        contact = contact_book.get(i)
+    for position in range(contact_book.size()):
+        contact = contact_book.get(position)
 
         if contact["name"].lower() == searched_name.lower():
             print(f"Contato encontrado: {contact['name']} - {contact['phone']}")
             found = True
 
     if not found:
-        print("Contato não encontrado.")
+        print("Contato nao encontrado.")
 
 
 def delete_contact(contact_book):
@@ -73,18 +120,18 @@ def delete_contact(contact_book):
     if contact_book.size() == 0:
         return
 
-    number = int(input("Digite o número do contato que deseja remover: "))
+    number = int(input("Digite o numero do contato que deseja remover: "))
     position = number - 1
 
     if position >= 0 and position < contact_book.size():
-        contact_book.remove(position)
+        contact_book.removeAt(position)
         print("Contato removido com sucesso!")
     else:
-        print("Opção inválida.")
+        print("Opcao invalida.")
 
 
 def show_menu():
-    print("\n===== AGENDA TELEFÔNICA =====")
+    print("\n===== AGENDA TELEFONICA =====")
     print("1. Cadastrar contato")
     print("2. Listar contatos")
     print("3. Buscar contato")
@@ -97,7 +144,7 @@ def main():
 
     while True:
         show_menu()
-        option = input("Escolha uma opção: ")
+        option = input("Escolha uma opcao: ")
 
         if option == "1":
             register_contact(contact_book)
@@ -111,7 +158,7 @@ def main():
             print("Programa finalizado.")
             break
         else:
-            print("Opção inválida.")
+            print("Opcao invalida.")
 
 
 if __name__ == "__main__":
